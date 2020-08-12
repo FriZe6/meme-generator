@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memegen</title>
+    <script src="https://kit.fontawesome.com/ad67fc8185.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="styles/style.css">
+</head>
+<body onload="onInit()">
+
+    <header>
+        <nav class="container flex align-center space-between"> 
+            <h1 class="header-header">Memegen</h1>
+
+            <ul class="header-list flex">
+                <li class="header-link"><a href="/">Gallery</a></li>
+                <li class="nav-line">|</li>
+                <li class="header-link"><a href="#about">About</a></li>
+
+            </ul>
+        </nav>
+        
+        
+    </header>
+    <section class="search">
+        <div class="search-container container">
+            <input type="text" placeholder="Enter search keyword">
+            <ul class="keywords-list">
+    
+            </ul>
+        </div>
+      
+    </section>
+   
+
+    <main class="container">
+        <div class="gallery grid">
+            
+        </div>
+
+        <div class="canvas-editor hidden">
+           
+            <canvas id="myCanvas" width="500px" height="500px">
+
+            </canvas>
+            <div class="settings flex column align-center">
+                <input type="text" class="meme-text" onkeyup="onDrawText()">
+                <button class="add-line" onclick="onAddLine()">add line</button>
+                <button class="move-up" onclick="onMoveLineUp()">move-up</button>
+                <button class="move-down" onclick="onMoveLineDown()">move-down</button>
+                <button class="bigger-font" onclick="onMakeBigger()">bigger</button>
+                <button class="smaller-font" onclick="onMakeSmaller()">smaller</button>
+                <button class="switch-lines" onclick="onSwitchLines()">Switch</button>
+                <button class="delete-line" onclick="onDeleteLine()">Delete</button>
+                <a class="downloadBtn" onclick="onDownloadImage(this)" download="meme"><button>Download</button></a>
+
+            </div>
+        </div>
+    </main>
+
+    <section id="about" class="about flex align-center">
+
+        <div class="about-container container flex align-center justify-center">
+            <img src="images/2.jpg" alt="profile">
+            <div class="about-text flex column justify-center wrap">
+
+                <h3>Roei Arazi</h3>
+                <p>very good very goodkjshdf;ajf alkjuhga;sdgn aldfhamwopivhwpoithm sduhohpta hatuhmjpaht</p>
+                <ul class="about-links flex">
+                    <li><a href="https://www.linkedin.com/in/roei-arazi-b1b42a19a/"><i class="fab fa-linkedin icon"></i></a></li>
+                    <li><a href="https://www.facebook.com/FriZe6/"><i class="fab fa-facebook-square icon"></i></a> </li>
+                    <li><a href="https://github.com/FriZe6"><i class="fab fa-github-square icon"></i></a></li>   
+                    
+                </ul>
+            </div>
+
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-container container flex column align-center justify-center">
+           
+            <h1>Memegen</h1>
+            <p>All rights blah blah</p>
+        </div>
+        
+    </footer>
+  
+    
+    <script src="js/utils.js"></script>
+    <script src="js/storage.js"></script>
+    <script src="js/service.js"></script>
+    <script src="js/control.js"></script>
+    
+</body>
+</html>
