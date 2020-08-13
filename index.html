@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,71 +8,120 @@
     <script src="https://kit.fontawesome.com/ad67fc8185.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="styles/style.css">
 </head>
+
 <body onload="onInit()">
 
     <header>
-        <nav class="container flex align-center space-between"> 
-            <h1 class="header-header">Memegen</h1>
+        <nav class="container flex align-center space-between">
+            <h1 class="header-header"><a href="/">Memegen</a></h1>
 
             <ul class="header-list flex">
-                <li class="header-link"><a href="https://frize6.github.io/meme-generator/">Gallery</a></li>
+                <li class="header-link" onclick="onOpenGallery()"><a href="#">Gallery</a></li>
                 <li class="nav-line">|</li>
                 <li class="header-link"><a href="#about">About</a></li>
+                <li class="nav-line">|</li>
+                <li class="header-link" onclick="onOpenMyMemes()"><a href="#">My Memes</a></li>
 
             </ul>
+            <button class="hamburger" onclick="onToggleSideBar()"><i class="fas fa-bars"></i></button>
+
         </nav>
-        
-        
+        <section class="sidebar hidden">
+            <div class="sidebar-header container flex space-between align-center">
+                <h1 class="header-header">Memegen</h1>
+                <button class="hamburger" onclick="onToggleSideBar()">X</button>
+            </div>
+
+            <ul class="side-list">
+                <li class="sidebar-link" onclick="onOpenGallerySide()"><a href="#">Gallery</a></li>
+
+                <li class="sidebar-link" onclick="onGoToAboutSide()"><a href="#about">About</a></li>
+
+                <li class="sidebar-link" onclick="onOpenMyMemesSide()"><a href="#">My Memes</a></li>
+            </ul>
+        </section>
+
     </header>
     <section class="search">
         <div class="search-container container">
             <input type="text" placeholder="Enter search keyword">
+            <span class="search-icon"><i class="fas fa-search"></i></span>
             <ul class="keywords-list">
-    
+
             </ul>
         </div>
-      
+
     </section>
-   
+
 
     <main class="container">
         <div class="gallery grid">
-            
+
         </div>
 
         <div class="canvas-editor hidden">
-           
+
             <canvas id="myCanvas" width="500px" height="500px">
 
             </canvas>
-            <div class="settings flex column align-center">
-                <input type="text" class="meme-text" onkeyup="onDrawText()">
-                <button class="add-line" onclick="onAddLine()">add line</button>
-                <button class="move-up" onclick="onMoveLineUp()">move-up</button>
-                <button class="move-down" onclick="onMoveLineDown()">move-down</button>
-                <button class="bigger-font" onclick="onMakeBigger()">bigger</button>
-                <button class="smaller-font" onclick="onMakeSmaller()">smaller</button>
-                <button class="switch-lines" onclick="onSwitchLines()">Switch</button>
-                <button class="delete-line" onclick="onDeleteLine()">Delete</button>
-                <a class="downloadBtn" onclick="onDownloadImage(this)" download="meme"><button>Download</button></a>
+            <div class="settings flex column align-center space-around">
+
+                <div class="add-line flex column align-center">
+                    <input type="text" class="meme-text" onkeyup="onDrawText()" placeholder="Enter funny stuff here">
+                    <div class="first-btn-row flex justify-center">
+                        <button class="add-line" onclick="onAddLine()"><i class="fas fa-plus"></i></button>
+                        <button class="switch-lines" onclick="onManualSwitchLines()"><i
+                                class="fas fa-exchange-alt fa-rotate-90"></i></button>
+                        <button class="delete-line" onclick="onDeleteLine()"><i class="far fa-trash-alt"></i></button>
+                    </div>
+                </div>
+
+                <div class="second-btn-row flex justify-center">
+                    <button class="bigger-font" onclick="onMakeBigger()">A+</button>
+                    <button class="smaller-font" onclick="onMakeSmaller()">A-</button>
+                    <button class="move-up" onclick="onMoveLineUp()"><i class="fas fa-arrow-up"></i></button>
+                    <button class="move-down" onclick="onMoveLineDown()"><i class="fas fa-arrow-down"></i></button>
+                    <button><input type="color" class="font-color"
+                            onchange="onChangeColor(this.value)"></input></button>
+                </div>
+                <div class="third-btn-row flex justify-center">
+                    <select name="fonts" class="change-font" onchange="onChangeFont(this.value)">
+                        <option value="impact">Impact</option>
+                        <option value="Montserrat-Regular">Montserrat</option>
+                    </select>
+
+                </div>
+                <div class="fourth-btn-row flex end">
+                    <button class="share-btn"><i class="fas fa-share-alt"></i></button>
+                    <a class="save-bts" onclick="onSaveMeme()"><button><i class="far fa-save"></i></button></a>
+                    <a class="download-btn" onclick="onDownloadImage(this)" download="meme"><button><i
+                                class="fas fa-download"></i></button></a>
+
+                </div>
 
             </div>
+        </div>
+
+        <div class="my-memes grid">
+
         </div>
     </main>
 
     <section id="about" class="about flex align-center">
 
         <div class="about-container container flex align-center justify-center">
-            <img src="images/2.jpg" alt="profile">
+            <img src="images/profile-pic.jpeg" alt="profile">
             <div class="about-text flex column justify-center wrap">
 
                 <h3>Roei Arazi</h3>
-                <p>very good very goodkjshdf;ajf alkjuhga;sdgn aldfhamwopivhwpoithm sduhohpta hatuhmjpaht</p>
+                <p>very good very goodkjshdf;ajf alsdfhla alihupaiufh aiouyt08375vn ioygfodsg v34o7gtvq098 3q87v9q3847tv
+                    3q8f75hq9 alkjuhga;sdgn aldfhhwpoithm sduhohpta hatuhmjpaht</p>
                 <ul class="about-links flex">
-                    <li><a href="https://www.linkedin.com/in/roei-arazi-b1b42a19a/"><i class="fab fa-linkedin icon"></i></a></li>
+                    <li><a href="https://www.linkedin.com/in/roei-arazi-b1b42a19a/"><i
+                                class="fab fa-linkedin icon"></i></a></li>
                     <li><a href="https://www.facebook.com/FriZe6/"><i class="fab fa-facebook-square icon"></i></a> </li>
-                    <li><a href="https://github.com/FriZe6"><i class="fab fa-github-square icon"></i></a></li>   
-                    
+                    <li><a href="https://github.com/FriZe6"><i class="fab fa-github-square icon"></i></a></li>
+
                 </ul>
             </div>
 
@@ -80,18 +130,19 @@
 
     <footer>
         <div class="footer-container container flex column align-center justify-center">
-           
-            <h1>Memegen</h1>
+
+            <h1><a href="#"> Memegen</a></h1>
             <p>All rights blah blah</p>
         </div>
-        
+
     </footer>
-  
-    
+
+
     <script src="js/utils.js"></script>
     <script src="js/storage.js"></script>
     <script src="js/service.js"></script>
     <script src="js/control.js"></script>
-    
+
 </body>
+
 </html>
