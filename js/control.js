@@ -1,6 +1,10 @@
 let gCanvas = document.getElementById("myCanvas");
 let ctx = gCanvas.getContext("2d");
+var image;
 let elBody = document.querySelector('body');
+let elGenerateBtn = document.querySelector('.generate-btn');
+let elMyImage = document.querySelector('.my-image');
+let elImageInput = document.querySelector('.image-input');
 var elGallery = document.querySelector('.gallery');
 var elSearch = document.querySelector('.search');
 var elAbout = document.querySelector('.about');
@@ -12,61 +16,50 @@ var elHamburger = document.querySelector('.hamburger');
 var elColor = document.querySelector('.font-color');
 var elFont = document.querySelector('.change-font');
 var mouseClicked = false, mouseReleased = true;
+var touchStart = false, touchEnd = true
+var x;
+var y;
 
 function onInit() {
     renderPage()
     gCanvas.addEventListener("mousedown", onMouseClick);
     gCanvas.addEventListener("mouseup", onMouseRelease);
     gCanvas.addEventListener("mousemove", onMouseMove);
-
+    gCanvas.addEventListener("touchstart", onTouchStart);
+    gCanvas.addEventListener("touchend", onTouchEnd);
+    gCanvas.addEventListener("touchmove", onTouchMove);
 
 }
 
 function onMouseClick(ev) {
-
-    var { offsetX, offsetY } = ev
+    var { offsetY } = ev
     mouseClicked = !mouseClicked;
     mouseReleased = !mouseReleased;
 
-
-
     for (var i = 0; i < gMeme.lines.length; i++) {
-
         if (gMeme.lines[i].positionY - offsetY < 50 && gMeme.lines[i].positionY - offsetY > 0) {
             gCurrMemeLine = gMeme.lines.indexOf(gMeme.lines[i])
             onSwitchLines()
         }
     }
-
-
 }
 
 function onMouseRelease(ev) {
-
     var { offsetX, offsetY } = ev
     mouseReleased = !mouseReleased
     mouseClicked = !mouseClicked;
-
     for (var i = 0; i < gMeme.lines.length; i++) {
-
         if (gMeme.lines[i].isSelected) {
-
             gMeme.lines[i].positionY = offsetY + 25
             gMeme.lines[i].positionX = offsetX
         }
-
     }
     onDrawText()
-
 }
 
 function onMouseMove({ offsetX, offsetY, movementX, movementY }) {
-
-
-
     if (mouseClicked && !mouseReleased) {
         for (var i = 0; i < gMeme.lines.length; i++) {
-
             if (gMeme.lines[i].isSelected) {
                 ctx.clearRect(0, 0, gCanvas.width, gCanvas.height)
                 onDrawImage(gCurrImgSrc)
@@ -76,17 +69,86 @@ function onMouseMove({ offsetX, offsetY, movementX, movementY }) {
                 ctx.strokeStyle = "black"
                 ctx.textAlign = gMeme.lines[i].align;
                 currMemeLine = getCurrMemeLine()
-
                 ctx.strokeStyle = "red"
                 ctx.strokeText(gMeme.lines[i].txt, offsetX - movementX, offsetY - movementY + 20);
                 ctx.fillText(gMeme.lines[i].txt, offsetX - movementX, offsetY - movementY + 20);
-
             }
-
         }
+    }
+}
 
+
+function downloadImage(elLink) {
+    var imgContent = gCanvas.toDataURL('image/png');
+    elLink.href = imgContent
+}
+
+
+function onTouchStart(ev) {
+    ev.preventDefault();
+
+    touchStart = !touchStart;
+    touchEnd = !touchEnd
+
+    var offsetX = ev.touches[0].target.offsetLeft;
+    var offsetY = ev.touches[0].target.offsetTop;
+    x = ev.touches[0].clientX - offsetX
+    y = ev.touches[0].clientY - offsetY
+    for (var i = 0; i < gMeme.lines.length; i++) {
+        if (gMeme.lines[i].positionY - y < 80 && gMeme.lines[i].positionY - y > 0) {
+
+            gCurrMemeLine = gMeme.lines.indexOf(gMeme.lines[i])
+            onSwitchLines()
+        }
     }
 
+}
+
+function onTouchEnd(ev) {
+    ev.preventDefault();
+
+    touchStart = !touchStart;
+    touchEnd = !touchEnd
+
+
+    for (var i = 0; i < gMeme.lines.length; i++) {
+        if (gMeme.lines[i].isSelected) {
+            gMeme.lines[i].positionY = y
+            gMeme.lines[i].positionX = x
+        }
+    }
+    onDrawText()
+}
+
+function onTouchMove(ev) {
+    ev.preventDefault();
+    var offsetX = ev.touches[0].target.offsetLeft;
+    var offsetY = ev.touches[0].target.offsetTop;
+
+
+
+    x = ev.touches[0].clientX - offsetX
+    y = ev.touches[0].clientY - offsetY
+
+
+    if (touchStart && !touchEnd) {
+
+        for (var i = 0; i < gMeme.lines.length; i++) {
+            if (gMeme.lines[i].isSelected) {
+                ctx.clearRect(0, 0, gCanvas.width, gCanvas.height)
+                onDrawImage(gCurrImgSrc)
+                onDrawText()
+                ctx.font = gMeme.lines[i].size + "px " + gMeme.lines[i].font;
+                ctx.fillStyle = gMeme.lines[i].color
+                ctx.strokeStyle = "black"
+                ctx.textAlign = gMeme.lines[i].align;
+                currMemeLine = getCurrMemeLine()
+                ctx.strokeStyle = "red"
+                ctx.strokeText(gMeme.lines[i].txt, x, y);
+                ctx.fillText(gMeme.lines[i].txt, x, y);
+            }
+        }
+    }
 }
 
 
@@ -108,25 +170,37 @@ function onChooseImage(imageSrc) {
     elAbout.style.display = 'none';
     elEditor.classList.add('flex');
     elSearch.style.display = 'none'
+    elMyImage.style.display = 'none'
     elColor.value = '#ffffff'
     onDrawImage(imageSrc)
     getCurrImage(imageSrc)
     createMeme(elTextInput)
+   
 }
 
 
 function onDrawImage(imageSrc) {
-    var image = new Image();
-    ctx.clearRect(0, 0, gCanvas.width, gCanvas.height)
+    image = new Image();
     image.src = imageSrc;
-    ctx.drawImage(image, 0, 0)
+
+    if (window.innerWidth < 1000 && window.innerWidth > 587) {
+        image.width = 400
+        image.height = 400
+    }
+    if (window.innerWidth < 588) {
+        image.width = 300
+        image.height = 300
+    }
+    gCanvas.width = image.width
+    gCanvas.height = image.height
+    ctx.clearRect(0, 0, gCanvas.width, gCanvas.height)
+    ctx.drawImage(image, 0, 0, gCanvas.width, gCanvas.height)
+
 }
 
 function onDrawText() {
     ctx.clearRect(0, 0, gCanvas.width, gCanvas.height)
     onDrawImage(gCurrImgSrc)
-
-
     for (var i = 0; i < gMeme.lines.length; i++) {
         ctx.font = gMeme.lines[i].size + "px " + gMeme.lines[i].font;
         ctx.fillStyle = gMeme.lines[i].color
@@ -134,7 +208,6 @@ function onDrawText() {
         ctx.textAlign = gMeme.lines[i].align;
         currMemeLine = getCurrMemeLine()
         updateMeme(elTextInput, currMemeLine)
-
         if (gMeme.lines[i].isSelected) {
             ctx.strokeStyle = "red"
             ctx.fillText(gMeme.lines[i].txt, gMeme.lines[i].positionX, gMeme.lines[i].positionY);
@@ -211,7 +284,16 @@ function onDeleteLine() {
 }
 
 function onDownloadImage(elLink) {
-    downloadImage(elLink, gCanvas)
+    for (var i = 0; i < gMeme.lines.length; i++) {
+        ctx.font = gMeme.lines[i].size + "px " + gMeme.lines[i].font;
+        ctx.fillStyle = gMeme.lines[i].color
+        ctx.strokeStyle = "black"
+        ctx.textAlign = gMeme.lines[i].align;
+        currMemeLine = getCurrMemeLine()
+        ctx.fillText(gMeme.lines[i].txt, gMeme.lines[i].positionX, gMeme.lines[i].positionY);
+        ctx.strokeText(gMeme.lines[i].txt, gMeme.lines[i].positionX, gMeme.lines[i].positionY);
+    }
+    downloadImage(elLink)
 }
 
 function onOpenGallery() {
@@ -220,6 +302,7 @@ function onOpenGallery() {
     elEditor.classList.remove('flex');
     elSearch.style.display = 'block'
     elMyMemes.style.display = 'none'
+    elMyImage.style.display = 'block'
 }
 
 function onOpenMyMemes() {
@@ -237,21 +320,20 @@ function onOpenMyMemes() {
 
 function onSaveMeme() {
     for (var i = 0; i < gMeme.lines.length; i++) {
-        ctx.font = gMeme.lines[i].size + "px Impact";
+        ctx.font = gMeme.lines[i].size + "px " + gMeme.lines[i].font;
         ctx.fillStyle = gMeme.lines[i].color
         ctx.strokeStyle = "black"
         ctx.textAlign = gMeme.lines[i].align;
         currMemeLine = getCurrMemeLine()
         ctx.fillText(gMeme.lines[i].txt, gMeme.lines[i].positionX, gMeme.lines[i].positionY);
         ctx.strokeText(gMeme.lines[i].txt, gMeme.lines[i].positionX, gMeme.lines[i].positionY);
-
     }
     saveMeme()
 }
 
 function renderMyMemes() {
     var strHTML = ''
-    console.log(gSavedImages);
+
     for (var i = 0; i < gSavedImages.length; i++) {
         strHTML += `<img src=${gSavedImages[i].src}>`
     }
@@ -275,3 +357,14 @@ function onOpenMyMemesSide() {
     onOpenMyMemes()
     elSideBar.classList.toggle('hidden')
 }
+
+
+document.querySelector('input[type="file"]').addEventListener('change', function () {
+    if (this.files && this.files[0]) {
+        var img = new Image();
+        img.src = URL.createObjectURL(this.files[0]);
+        pushNewImage(img.src);
+        renderPage()
+
+    }
+});

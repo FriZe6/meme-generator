@@ -5,6 +5,7 @@ var gSavedImages;
 var gCurrImage;
 var gCurrImgSrc;
 var gCurrMemeLine = 0;
+var gLoadedImg;
 
 var gKeywords = { 'happy': 12, 'funny puk': 1 }
 
@@ -113,7 +114,7 @@ function addLine() {
                 txt: elTextInput.value,
                 size: 50,
                 positionX: gCanvas.width / 2,
-                positionY: 270,
+                positionY: gCanvas.height / 2,
                 align: 'center',
                 color: '#ffffff',
                 font: 'impact',
@@ -192,6 +193,10 @@ function saveMeme() {
     gSavedImages.push(imageSrc)
 
     saveToStorage(KEY, gSavedImages)
-    console.log(gSavedImages);
+    
+}
+
+function pushNewImage(source){
+    gImgs.unshift(createImg(19, source,['']))
 }
 
