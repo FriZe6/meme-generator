@@ -6,6 +6,7 @@ var gCurrImage;
 var gCurrImgSrc;
 var gCurrMemeLine = 0;
 var gLoadedImg;
+var gFilteredImgs=[];
 
 var gKeywords = { 'happy': 12, 'funny puk': 1 }
 
@@ -155,6 +156,7 @@ function manualSwitchLines() {
 
 function changeColor(color) {
     gMeme.lines[gMeme.selectedLineIdx].color = color
+    console.log(color);
 }
 
 function changeFont(font) {
@@ -199,4 +201,5 @@ function saveMeme() {
 function pushNewImage(source){
     gImgs.unshift(createImg(19, source,['']))
 }
+
 

@@ -44,6 +44,7 @@ ul {
 
 a {
   text-decoration: none;
+  color:inherit;
 }
 
 a:visited {
@@ -192,19 +193,6 @@ li.sidebar-link:active {
   transition: all 0.5s ease;
 }
 
-
-
-/* SEARCH */
-.search {
-  background-color: white;
-  padding: 20px 0;
-}
-
-.search input {
-  border: 0;
-  border-bottom: 2px solid black;
-  font-size: 1.2rem;
-}
 
 /* MAIN */
 

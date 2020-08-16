@@ -6,7 +6,6 @@ let elGenerateBtn = document.querySelector('.generate-btn');
 let elMyImage = document.querySelector('.my-image');
 let elImageInput = document.querySelector('.image-input');
 var elGallery = document.querySelector('.gallery');
-var elSearch = document.querySelector('.search');
 var elAbout = document.querySelector('.about');
 var elMyMemes = document.querySelector('.my-memes');
 var elEditor = document.querySelector('.canvas-editor')
@@ -169,7 +168,6 @@ function onChooseImage(imageSrc) {
     elGallery.style.display = 'none';
     elAbout.style.display = 'none';
     elEditor.classList.add('flex');
-    elSearch.style.display = 'none'
     elMyImage.style.display = 'none'
     elColor.value = '#ffffff'
     onDrawImage(imageSrc)
@@ -182,8 +180,12 @@ function onChooseImage(imageSrc) {
 function onDrawImage(imageSrc) {
     image = new Image();
     image.src = imageSrc;
-
-    if (window.innerWidth < 1000 && window.innerWidth > 587) {
+    console.log(image);
+    if(window.innerWidth>960){
+        image.width=500
+        image.height=500
+    }
+    if (window.innerWidth < 961 && window.innerWidth > 587) {
         image.width = 400
         image.height = 400
     }
@@ -300,7 +302,6 @@ function onOpenGallery() {
     elGallery.style.display = 'grid';
     elAbout.style.display = 'flex';
     elEditor.classList.remove('flex');
-    elSearch.style.display = 'block'
     elMyMemes.style.display = 'none'
     elMyImage.style.display = 'block'
 }
@@ -309,8 +310,8 @@ function onOpenMyMemes() {
     elGallery.style.display = 'none';
     elAbout.style.display = 'flex';
     elEditor.classList.remove('flex');
-    elSearch.style.display = 'none'
     elMyMemes.style.display = 'grid'
+    elMyImage.style.display = 'none'
 
     if (!gSavedImages) {
         elMyMemes.style.display = 'block'
@@ -335,7 +336,7 @@ function renderMyMemes() {
     var strHTML = ''
 
     for (var i = 0; i < gSavedImages.length; i++) {
-        strHTML += `<img src=${gSavedImages[i].src}>`
+        strHTML += `<img src=${gSavedImages[i].src} onclick="onChooseImage(this.src)">`
     }
     elMyMemes.innerHTML = strHTML
 }
